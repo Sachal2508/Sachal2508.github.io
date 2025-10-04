@@ -227,6 +227,27 @@
             transform: translateY(-3px);
         }
 
+    .resume-btn {
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+}
+
+.resume-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+}
+
+
         .section-title {
             text-align: center;
             font-size: 2.5rem;
@@ -533,6 +554,7 @@
                 <a href="#projects" class="btn btn-primary">View Projects</a>
                 <a href="#about" class="btn btn-outline">About Me</a>
                 <a href="#contact" class="btn btn-outline">Get in Touch</a>
+                <a href="Resume.pdf" download class="resume-btn">Download Resume</a>
             </div>
         </div>
         <div class="hero-image">
