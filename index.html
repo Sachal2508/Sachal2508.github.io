@@ -13,14 +13,17 @@
         }
 
         :root {
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --dark: #0f172a;
-            --darker: #020617;
+            --primary: #00ff88;
+            --secondary: #00d4ff;
+            --accent: #ff006e;
+            --dark: #0a0e27;
+            --darker: #050814;
             --light: #f1f5f9;
             --text: #e2e8f0;
             --text-muted: #94a3b8;
+            --neon-blue: #00f0ff;
+            --neon-pink: #ff00ff;
+            --neon-green: #00ff88;
         }
 
         body {
@@ -31,53 +34,147 @@
             line-height: 1.6;
         }
 
-        .bg-gradient {
+        /* Welcome Screen */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 1s ease-out;
+        }
+
+        .welcome-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .glitch-text {
+            font-size: 5rem;
+            font-weight: bold;
+            color: var(--neon-green);
+            text-shadow: 
+                0 0 10px var(--neon-green),
+                0 0 20px var(--neon-green),
+                0 0 30px var(--neon-green),
+                0 0 40px var(--neon-green);
+            animation: glitch 3s infinite;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 2rem auto;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            width: 0;
+            animation: loading 3s ease-out forwards;
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        @keyframes loading {
+            to { width: 100%; }
+        }
+
+        .enter-text {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeInText 1s ease-out 2.5s forwards;
+        }
+
+        @keyframes fadeInText {
+            to { opacity: 1; }
+        }
+
+        /* Particle Background */
+        .particle-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
         }
 
-        .bg-gradient::before {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-            top: -250px;
-            right: -250px;
-            animation: float 20s ease-in-out infinite;
+        /* Animated Grid Background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
         }
 
-        .bg-gradient::after {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
-            bottom: -200px;
-            left: -200px;
-            animation: float 15s ease-in-out infinite reverse;
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -50px) rotate(120deg); }
-            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        /* Floating Code Snippets */
+        .code-float {
+            position: fixed;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: var(--neon-green);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 1;
+            text-shadow: 0 0 5px var(--neon-green);
         }
 
+        /* Navigation */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
             z-index: 1000;
             padding: 1rem 0;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            border-bottom: 2px solid var(--neon-green);
+            box-shadow: 0 5px 30px rgba(0, 255, 136, 0.3);
         }
 
         .nav-container {
@@ -90,12 +187,19 @@
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'Courier New', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--neon-green);
+            text-shadow: 
+                0 0 10px var(--neon-green),
+                0 0 20px var(--neon-green);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green); }
+            50% { text-shadow: 0 0 20px var(--neon-green), 0 0 40px var(--neon-green); }
         }
 
         .nav-links {
@@ -107,94 +211,153 @@
         .nav-links a {
             color: var(--text);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
             font-weight: 500;
+            position: relative;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-green);
+            transition: width 0.3s;
+            box-shadow: 0 0 10px var(--neon-green);
         }
 
         .nav-links a:hover {
-            color: var(--primary);
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
         }
 
         .menu-toggle {
             display: none;
             background: none;
-            border: none;
-            color: var(--text);
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
             font-size: 1.5rem;
             cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 5px;
         }
 
         section {
             min-height: 100vh;
-            padding: 6rem 2rem 4rem;
-            max-width: 1200px;
+            padding: 8rem 2rem 4rem;
+            max-width: 1400px;
             margin: 0 auto;
+            position: relative;
         }
 
+        /* Hero Section */
         .hero {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 4rem;
             flex-wrap: wrap;
+            position: relative;
         }
 
         .hero-content {
             flex: 1;
             min-width: 300px;
+            z-index: 2;
         }
 
         .hero-image {
-            flex: 0 0 300px;
+            flex: 0 0 350px;
             position: relative;
+            z-index: 2;
         }
 
         .hero-image img {
-            width: 300px;
-            height: 300px;
+            width: 350px;
+            height: 350px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--primary);
-            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
-            animation: pulse 3s ease-in-out infinite;
+            border: 4px solid var(--neon-green);
+            box-shadow: 
+                0 0 30px var(--neon-green),
+                0 0 60px rgba(0, 255, 136, 0.5),
+                inset 0 0 30px rgba(0, 255, 136, 0.2);
+            animation: float-image 6s ease-in-out infinite;
+            position: relative;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3); }
-            50% { transform: scale(1.05); box-shadow: 0 25px 70px rgba(236, 72, 153, 0.4); }
+        @keyframes float-image {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(3deg); }
+        }
+
+        .image-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse-size 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-size {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
         }
 
         h1 {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--neon-green);
+            text-shadow: 
+                0 0 10px var(--neon-green),
+                0 0 20px var(--neon-green),
+                0 0 30px var(--neon-green);
             animation: slideInLeft 1s ease-out;
         }
 
         @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
+            from { opacity: 0; transform: translateX(-100px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
         .subtitle {
-            font-size: 1.5rem;
-            color: var(--text-muted);
+            font-size: 1.8rem;
+            color: var(--neon-blue);
             margin-bottom: 2rem;
             animation: slideInLeft 1s ease-out 0.2s both;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .typing-text {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            animation: slideInLeft 1s ease-out 0.4s both;
+            border-right: 2px solid var(--neon-green);
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .cta-buttons {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
-            animation: slideInLeft 1s ease-out 0.4s both;
+            animation: slideInLeft 1s ease-out 0.6s both;
         }
 
         .btn {
-            padding: 0.8rem 2rem;
+            padding: 1rem 2.5rem;
             border: none;
             border-radius: 50px;
             font-size: 1rem;
@@ -203,76 +366,106 @@
             transition: all 0.3s;
             text-decoration: none;
             display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
+            border: 2px solid var(--neon-green);
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.7);
         }
 
         .btn-outline {
             background: transparent;
-            color: var(--text);
-            border: 2px solid var(--primary);
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
         }
 
         .btn-outline:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
+            background: var(--neon-green);
+            color: #000;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
         }
-
-    .resume-btn {
-  padding: 0.8rem 2rem;
-  border: none;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-decoration: none;
-  display: inline-block;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
-  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-}
-
-.resume-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
-}
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 3rem;
+            margin-bottom: 4rem;
+            color: var(--neon-green);
+            text-shadow: 
+                0 0 10px var(--neon-green),
+                0 0 20px var(--neon-green);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        /* About Section */
         .about-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            gap: 4rem;
             align-items: start;
         }
 
+        .about-text {
+            background: rgba(10, 14, 39, 0.6);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
         .about-text p {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             color: var(--text-muted);
             line-height: 1.8;
         }
 
         .timeline {
             position: relative;
-            padding-left: 2rem;
+            padding-left: 3rem;
         }
 
         .timeline::before {
@@ -281,87 +474,167 @@
             left: 0;
             top: 0;
             bottom: 0;
-            width: 2px;
-            background: linear-gradient(180deg, var(--primary), var(--accent));
+            width: 3px;
+            background: linear-gradient(180deg, var(--neon-green), var(--neon-blue));
+            box-shadow: 0 0 10px var(--neon-green);
         }
 
         .timeline-item {
             position: relative;
-            padding-bottom: 2rem;
+            padding-bottom: 3rem;
+            background: rgba(10, 14, 39, 0.6);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            margin-left: 2rem;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(10px);
+            border-color: var(--neon-green);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
         }
 
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -2.5rem;
-            top: 0;
-            width: 12px;
-            height: 12px;
+            left: -3.5rem;
+            top: 1.5rem;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
-            background: var(--primary);
-            box-shadow: 0 0 0 4px var(--dark);
+            background: var(--neon-green);
+            box-shadow: 
+                0 0 0 5px var(--dark),
+                0 0 20px var(--neon-green);
+            animation: pulse-dot 2s ease-in-out infinite;
         }
 
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 5px var(--dark), 0 0 20px var(--neon-green); }
+            50% { box-shadow: 0 0 0 5px var(--dark), 0 0 30px var(--neon-green), 0 0 40px var(--neon-green); }
+        }
+
+        /* Skills Section */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
         }
 
         .skill-card {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: all 0.3s;
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(0, 255, 136, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.6s;
+        }
+
+        .skill-card:hover::before {
+            left: 100%;
         }
 
         .skill-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--neon-green);
+            box-shadow: 
+                0 20px 50px rgba(0, 255, 136, 0.4),
+                inset 0 0 20px rgba(0, 255, 136, 0.1);
         }
 
         .skill-header {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .skill-header i {
-            font-size: 2rem;
-            color: var(--primary);
+            font-size: 2.5rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 20px var(--neon-green);
+        }
+
+        .skill-header h3 {
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: rgba(99, 102, 241, 0.1);
+            height: 10px;
+            background: rgba(0, 255, 136, 0.1);
             border-radius: 10px;
             overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
             border-radius: 10px;
-            transition: width 1s ease-out;
+            transition: width 2s ease-out;
             width: 0;
+            box-shadow: 0 0 20px var(--neon-green);
+            position: relative;
+            overflow: hidden;
         }
 
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Projects Section */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
         }
 
         .project-card {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 15px;
-            padding: 2rem;
-            transition: all 0.3s;
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.5s;
             position: relative;
             overflow: hidden;
         }
@@ -370,114 +643,172 @@
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
+            left: -100%;
+            width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            transform: scaleX(0);
-            transition: transform 0.3s;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            transition: left 0.5s;
+            box-shadow: 0 0 20px var(--neon-green);
         }
 
         .project-card:hover::before {
-            transform: scaleX(1);
+            left: 0;
         }
 
         .project-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.3);
+            transform: translateY(-15px) rotateX(5deg);
+            border-color: var(--neon-green);
+            box-shadow: 
+                0 25px 60px rgba(0, 255, 136, 0.4),
+                inset 0 0 30px rgba(0, 255, 136, 0.1);
         }
 
         .project-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .project-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             margin-bottom: 1rem;
-        }
-
-        .project-description {
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
         }
 
         .tech-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 0.7rem;
+            margin: 1.5rem 0;
         }
 
         .tech-tag {
-            padding: 0.3rem 0.8rem;
-            background: rgba(99, 102, 241, 0.2);
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid var(--neon-green);
             border-radius: 20px;
             font-size: 0.85rem;
-            color: var(--primary);
+            color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            transition: all 0.3s;
         }
 
+        .tech-tag:hover {
+            background: var(--neon-green);
+            color: #000;
+            transform: scale(1.1);
+        }
+
+        /* Contact Section */
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .contact-card {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 15px;
-            padding: 2rem;
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 2.5rem;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .contact-card:hover::after {
+            width: 300px;
+            height: 300px;
         }
 
         .contact-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--neon-green);
+            box-shadow: 0 20px 50px rgba(0, 255, 136, 0.4);
         }
 
         .contact-card i {
-            font-size: 3rem;
-            color: var(--primary);
+            font-size: 3.5rem;
+            color: var(--neon-green);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px var(--neon-green);
+            animation: pulse-icon 2s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .contact-card h3 {
+            color: var(--neon-green);
             margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
         }
 
         .contact-card a {
             color: var(--text);
             text-decoration: none;
             word-break: break-word;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
         }
 
         .contact-card a:hover {
-            color: var(--primary);
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
         }
 
         footer {
             text-align: center;
-            padding: 2rem;
-            border-top: 1px solid rgba(99, 102, 241, 0.1);
+            padding: 3rem 2rem;
+            border-top: 2px solid var(--neon-green);
             color: var(--text-muted);
+            background: rgba(10, 14, 39, 0.8);
+            box-shadow: 0 -5px 30px rgba(0, 255, 136, 0.2);
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
                 position: fixed;
                 top: 70px;
                 right: -100%;
-                background: rgba(15, 23, 42, 0.98);
-                backdrop-filter: blur(10px);
+                background: rgba(10, 14, 39, 0.98);
+                backdrop-filter: blur(20px);
                 width: 70%;
                 height: calc(100vh - 70px);
                 flex-direction: column;
                 padding: 2rem;
-                transition: right 0.3s;
-                border-left: 1px solid rgba(99, 102, 241, 0.2);
+                transition: right 0.5s;
+                border-left: 2px solid var(--neon-green);
             }
 
             .nav-links.active {
@@ -492,6 +823,10 @@
                 font-size: 2.5rem;
             }
 
+            .glitch-text {
+                font-size: 3rem;
+            }
+
             .about-content {
                 grid-template-columns: 1fr;
             }
@@ -499,38 +834,67 @@
             section {
                 padding: 5rem 1rem 3rem;
             }
+
+            .hero-image img {
+                width: 280px;
+                height: 280px;
+            }
         }
 
         .fade-in {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
 
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Cyberpunk accents */
+        .cyber-line {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(180deg, transparent, var(--neon-green), transparent);
+            animation: lineMove 3s linear infinite;
+        }
+
+        @keyframes lineMove {
+            0% { transform: translateY(-100px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
     </style>
 </head>
 <body>
-    <div class="bg-gradient"></div>
+    <!-- Welcome Screen with Matrix Effect -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
+        <div class="welcome-content">
+            <div class="glitch-text">MUHAMMAD SACHAL</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <div class="enter-text">INITIALIZING PORTFOLIO...</div>
+        </div>
+    </div>
+
+    <!-- Particle Background -->
+    <canvas class="particle-canvas" id="particleCanvas"></canvas>
+    
+    <!-- Grid Background -->
+    <div class="grid-background"></div>
+
+    <!-- Cyber Lines -->
+    <div class="cyber-line" style="left: 20%; animation-delay: 0s;"></div>
+    <div class="cyber-line" style="left: 50%; animation-delay: 1s;"></div>
+    <div class="cyber-line" style="left: 80%; animation-delay: 2s;"></div>
 
     <nav>
         <div class="nav-container">
-            <div class="logo">MS</div>
-            <style>
-            .logo {
-  font-family: 'Poppins', sans-serif; /* modern clean font */
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #ffffff;
-  background: linear-gradient(90deg, #0077ff, #00ffaa);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-</style>
+            <div class="logo">&lt;MS /&gt;</div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home" onclick="closeMenu()">Home</a></li>
                 <li><a href="#about" onclick="closeMenu()">About</a></li>
@@ -546,43 +910,44 @@
 
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Muhammad Sachal</h1>
-            <p class="subtitle">.NET Developer | Pythonist | AI/ML Enthusiast</p>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">Passionate about building modern, scalable web applications and exploring the frontiers of artificial intelligence.</p>
+            <h1>MUHAMMAD SACHAL</h1>
+            <p class="subtitle">&lt; Full Stack Developer /&gt;</p>
+            <p class="typing-text" id="typingText"></p>
             <div class="cta-buttons">
                 <a href="#projects" class="btn btn-primary">View Projects</a>
                 <a href="#about" class="btn btn-outline">About Me</a>
                 <a href="#contact" class="btn btn-outline">Get in Touch</a>
-                <a href="Resume.pdf" download class="resume-btn">Download Resume</a>
+                <a href="Resume.pdf" download class="btn btn-primary">Download Resume</a>
             </div>
         </div>
         <div class="hero-image">
+            <div class="image-glow"></div>
             <img src="images/Sachal.jpg" alt="Muhammad Sachal">
         </div>
     </section>
 
     <section id="about">
-        <h2 class="section-title fade-in">About Me</h2>
+        <h2 class="section-title fade-in">&lt; ABOUT_ME /&gt;</h2>
         <div class="about-content">
             <div class="about-text fade-in">
-                <p>I'm Muhammad Sachal, a passionate developer specializing in Python and C/C++. I love solving real-world problems with technology and building applications that are fast, clean, and scalable. But I'm not just about code—I'm also a lifelong learner who enjoys exploring new technologies and methodologies.</p>
-                <p>With experience in C/C++, Assembly Language Programming Intel 8086, ASP.NET Core, JavaScript (in progress), and Python with Web Development and AI/ML (in progress), I continuously explore emerging technologies like AI/ML and cloud computing. I enjoy working on both frontend and backend, and I thrive in collaborative environments.</p>
+                <p>I'm Muhammad Sachal, a passionate developer specializing in Python and C/C++. I love solving real-world problems with technology and building applications that are fast, clean, and scalable.</p>
+                <p>With experience in C/C++, Assembly Language Programming Intel 8086, ASP.NET Core, JavaScript, and Python with Web Development and AI/ML, I continuously explore emerging technologies like AI/ML and cloud computing.</p>
                 <p>When I'm not coding, I enjoy reading, learning new languages like Indonesian, Japanese, and Arabic, learning about AI, and working on personal side projects. Let's build something awesome together!</p>
             </div>
             <div class="timeline fade-in">
-                <h3 style="margin-bottom: 2rem;">Education</h3>
+                <h3 style="margin-bottom: 2rem; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green);">EDUCATION</h3>
                 <div class="timeline-item">
-                    <h4>Bachelor of Science in Computer Science</h4>
+                    <h4 style="color: var(--neon-blue);">Bachelor of Science in Computer Science</h4>
                     <p style="color: var(--text-muted);">FAST NUCES, Lahore</p>
                     <p style="color: var(--text-muted); font-size: 0.9rem;">2023 – 2027 (Currently in 5th Semester)</p>
                 </div>
                 <div class="timeline-item">
-                    <h4>FSc Pre-Engineering</h4>
+                    <h4 style="color: var(--neon-blue);">FSc Pre-Engineering</h4>
                     <p style="color: var(--text-muted);">Govt. College Graduate of Science</p>
                     <p style="color: var(--text-muted); font-size: 0.9rem;">Completed in 2023 • Grade: A</p>
                 </div>
                 <div class="timeline-item">
-                    <h4>Matriculation (Science)</h4>
+                    <h4 style="color: var(--neon-blue);">Matriculation (Science)</h4>
                     <p style="color: var(--text-muted);">Govt. Chishtia High School</p>
                     <p style="color: var(--text-muted); font-size: 0.9rem;">Completed in 2021 • Grade: A+</p>
                 </div>
@@ -591,7 +956,7 @@
     </section>
 
     <section id="skills">
-        <h2 class="section-title fade-in">My Skills</h2>
+        <h2 class="section-title fade-in">&lt; TECH_STACK /&gt;</h2>
         <div class="skills-grid">
             <div class="skill-card fade-in">
                 <div class="skill-header">
@@ -658,7 +1023,7 @@
             </div>
         </div>
 
-        <h3 style="margin-top: 4rem; margin-bottom: 2rem; text-align: center; color: var(--primary);" class="fade-in">Currently Learning</h3>
+        <h3 style="margin-top: 4rem; margin-bottom: 2rem; text-align: center; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue);" class="fade-in">&lt; LEARNING_NOW /&gt;</h3>
         <div class="skills-grid">
             <div class="skill-card fade-in">
                 <div class="skill-header">
@@ -691,12 +1056,12 @@
     </section>
 
     <section id="projects">
-        <h2 class="section-title fade-in">Projects I've Built</h2>
+        <h2 class="section-title fade-in">&lt; PROJECTS /&gt;</h2>
         <div class="projects-grid">
             <div class="project-card fade-in">
                 <div class="project-icon">📖</div>
                 <h3 class="project-title">Al-Qur'an Android App</h3>
-                <p class="project-description">A beautiful, feature-rich Qur’an app for Android. Read the full Qur’an in Arabic with translations, tafsir, bookmarks, prayer times, Qibla direction, nearby masjids, and more—all in an elegant, offline-accessible interface.</p>
+                <p class="project-description" style="color: var(--text-muted);">A beautiful, feature-rich Qur'an app for Android. Read the full Qur'an in Arabic with translations, tafsir, bookmarks, prayer times, Qibla direction, nearby masjids, and more—all in an elegant, offline-accessible interface.</p>
                 <div class="tech-tags">
                     <span class="tech-tag">React.js</span>
                     <span class="tech-tag">JavaScript</span>
@@ -712,7 +1077,7 @@
             <div class="project-card fade-in">
                 <div class="project-icon">✂️</div>
                 <h3 class="project-title">Tailor Shop Web App</h3>
-                <p class="project-description">A professional full-stack .NET web app for tailoring shops — manage customers, employees, individual accounts, invoices, and suit orders with ease.</p>
+                <p class="project-description" style="color: var(--text-muted);">A professional full-stack .NET web app for tailoring shops — manage customers, employees, individual accounts, invoices, and suit orders with ease.</p>
                 <div class="tech-tags">
                     <span class="tech-tag">.NET</span>
                     <span class="tech-tag">C#</span>
@@ -725,7 +1090,7 @@
             <div class="project-card fade-in">
                 <div class="project-icon">🐍</div>
                 <h3 class="project-title">Snake Game</h3>
-                <p class="project-description">A classic Snake game built using Python and Pygame. Features fruit collection, graphical snake movement, and dynamic difficulty modes.</p>
+                <p class="project-description" style="color: var(--text-muted);">A classic Snake game built using Python and Pygame. Features fruit collection, graphical snake movement, and dynamic difficulty modes.</p>
                 <div class="tech-tags">
                     <span class="tech-tag">Python</span>
                     <span class="tech-tag">Pygame</span>
@@ -736,7 +1101,7 @@
             <div class="project-card fade-in">
                 <div class="project-icon">👤</div>
                 <h3 class="project-title">Student Face Recognition</h3>
-                <p class="project-description">A student attendance system with face recognition. Features face detection using cmake on PC's camera, attendance marking locally in a CSV file.</p>
+                <p class="project-description" style="color: var(--text-muted);">A student attendance system with face recognition. Features face detection using cmake on PC's camera, attendance marking locally in a CSV file.</p>
                 <div class="tech-tags">
                     <span class="tech-tag">Python</span>
                     <span class="tech-tag">CMake</span>
@@ -747,7 +1112,7 @@
             <div class="project-card fade-in">
                 <div class="project-icon">🎤</div>
                 <h3 class="project-title">Voice Assistant</h3>
-                <p class="project-description">A voice-activated assistant built in Python. Supports commands, searches, and app control using speech recognition.</p>
+                <p class="project-description" style="color: var(--text-muted);">A voice-activated assistant built in Python. Supports commands, searches, and app control using speech recognition.</p>
                 <div class="tech-tags">
                     <span class="tech-tag">Python</span>
                     <span class="tech-tag">AI</span>
@@ -758,7 +1123,7 @@
             <div class="project-card fade-in">
                 <div class="project-icon">💻</div>
                 <h3 class="project-title">Portfolio Website (.NET)</h3>
-                <p class="project-description">Responsive portfolio built with ASP.NET Core and Razor Pages. Designed for showcasing skills and projects professionally.</p>
+                <p class="project-description" style="color: var(--text-muted);">Responsive portfolio built with ASP.NET Core and Razor Pages. Designed for showcasing skills and projects professionally.</p>
                 <div class="tech-tags">
                     <span class="tech-tag">.NET</span>
                     <span class="tech-tag">Bootstrap</span>
@@ -769,7 +1134,7 @@
             <div class="project-card fade-in">
                 <div class="project-icon">🍬</div>
                 <h3 class="project-title">Candy Crush Clone</h3>
-                <p class="project-description">A tile-matching game built in C/C++ with custom graphics and grid logic. Mimics basic gameplay of the original Candy Crush.</p>
+                <p class="project-description" style="color: var(--text-muted);">A tile-matching game built in C/C++ with custom graphics and grid logic. Mimics basic gameplay of the original Candy Crush.</p>
                 <div class="tech-tags">
                     <span class="tech-tag">C++</span>
                     <span class="tech-tag">Game Logic</span>
@@ -780,7 +1145,7 @@
             <div class="project-card fade-in">
                 <div class="project-icon">🔤</div>
                 <h3 class="project-title">Alphabet Catcher</h3>
-                <p class="project-description">Assembly-based arcade game where letters fall and the user must catch the correct ones using keyboard input. A test of speed and precision!</p>
+                <p class="project-description" style="color: var(--text-muted);">Assembly-based arcade game where letters fall and the user must catch the correct ones using keyboard input. A test of speed and precision!</p>
                 <div class="tech-tags">
                     <span class="tech-tag">Assembly</span>
                     <span class="tech-tag">8086</span>
@@ -791,7 +1156,7 @@
     </section>
 
     <section id="contact">
-        <h2 class="section-title fade-in">Get In Touch</h2>
+        <h2 class="section-title fade-in">&lt; CONNECT /&gt;</h2>
         <p style="text-align: center; color: var(--text-muted); margin-bottom: 3rem;" class="fade-in">Feel free to reach out via email or connect with me on social media!</p>
         <div class="contact-grid">
             <div class="contact-card fade-in">
@@ -818,10 +1183,161 @@
     </section>
 
     <footer>
-        <p>&copy; 2025 Muhammad Sachal. All rights reserved.</p>
+        <p>&copy; 2025 Muhammad Sachal. All rights reserved. | Crafted with 💚 and Code</p>
     </footer>
 
     <script>
+        // Welcome Screen with Matrix Effect
+        const matrixCanvas = document.getElementById('matrixCanvas');
+        const matrixCtx = matrixCanvas.getContext('2d');
+        matrixCanvas.width = window.innerWidth;
+        matrixCanvas.height = window.innerHeight;
+
+        const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?';
+        const fontSize = 14;
+        const columns = matrixCanvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+            matrixCtx.fillStyle = '#00ff88';
+            matrixCtx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+                matrixCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        const matrixInterval = setInterval(drawMatrix, 33);
+
+        // Hide welcome screen after 3.5 seconds
+        setTimeout(() => {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            clearInterval(matrixInterval);
+        }, 3500);
+
+        // Particle System
+        const particleCanvas = document.getElementById('particleCanvas');
+        const particleCtx = particleCanvas.getContext('2d');
+        particleCanvas.width = window.innerWidth;
+        particleCanvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * particleCanvas.width;
+                this.y = Math.random() * particleCanvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > particleCanvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > particleCanvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                particleCtx.beginPath();
+                particleCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                particleCtx.fillStyle = 'rgba(0, 255, 136, 0.5)';
+                particleCtx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Connect nearby particles
+            particles.forEach((p1, i) => {
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        particleCtx.beginPath();
+                        particleCtx.strokeStyle = `rgba(0, 255, 136, ${0.2 - distance / 500})`;
+                        particleCtx.lineWidth = 0.5;
+                        particleCtx.moveTo(p1.x, p1.y);
+                        particleCtx.lineTo(p2.x, p2.y);
+                        particleCtx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        // Typing Effect
+        const typingText = document.getElementById('typingText');
+        const textToType = 'Passionate about building modern, scalable web applications and exploring AI/ML...';
+        let charIndex = 0;
+
+        function typeText() {
+            if (charIndex < textToType.length) {
+                typingText.textContent += textToType[charIndex];
+                charIndex++;
+                setTimeout(typeText, 50);
+            }
+        }
+
+        setTimeout(typeText, 4000);
+
+        // Floating Code Snippets
+        const codeSnippets = [
+            'function solve() { }',
+            'const data = [];',
+            'if (success) { }',
+            'while (true) { }',
+            'import React from "react";',
+            'class AI { }',
+            'def train_model():',
+            'SELECT * FROM users;',
+            '<Component />',
+            'npm install',
+            'git commit -m "Update"',
+            'docker run -d',
+        ];
+
+        function createFloatingCode() {
+            const code = document.createElement('div');
+            code.className = 'code-float';
+            code.textContent = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+            code.style.left = Math.random() * 100 + '%';
+            code.style.top = Math.random() * 100 + '%';
+            code.style.animation = `float ${5 + Math.random() * 5}s ease-in-out infinite`;
+            document.body.appendChild(code);
+
+            setTimeout(() => code.remove(), 10000);
+        }
+
+        setInterval(createFloatingCode, 2000);
+
+        // Menu Toggle
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
             navLinks.classList.toggle('active');
@@ -832,7 +1348,7 @@
             navLinks.classList.remove('active');
         }
 
-        // Intersection Observer for fade-in animations
+        // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -848,7 +1364,7 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Animate progress bars when visible
+        // Progress bars animation
         const progressObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -877,8 +1393,12 @@
                 }
             });
         });
+
+        // Resize handling
+        window.addEventListener('resize', () => {
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+        });
     </script>
 </body>
 </html>
-
-
